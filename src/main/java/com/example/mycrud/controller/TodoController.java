@@ -8,21 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 @RestController
-@RequestMapping("api/devices")
+@RequestMapping("api/v1/todos")
 public class TodoController{
     @Autowired
     private TodoRepository todoRepository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<Todo>getTodo() {
         return todoRepository.findAll();
@@ -33,43 +26,21 @@ public class TodoController{
         return todoRepository.save(todo);
     }
 
-
-//    @GetMapping("stat/{id}")
-//    public ResponseEntity<Todo> getEmployeeById(@PathVariable  long id){
-//        Todo todo = todoRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Device not exist with id:" + id));
-//        //todo.getIdleStatus();
-//        //return ResponseEntity.ok(todo.getIdleStatus());
-//        return ();
-//    }
-
-    @GetMapping("/status")
-    public String getDeviceStatus(){
-       String sampleData = "112130";
-
-       /*List dataResponse = todoRepository.findAll();
-        for (Object data:
-             dataResponse) {
-            System.out.println(data.toString());
-        }
-        return(dataResponse[0].toString());*
-
-        */
-        return(sampleData.toString());
+    @GetMapping("{id}")
+    public ResponseEntity<Todo> getEmployeeById(@PathVariable  long id){
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not exist with id:" + id));
+        return ResponseEntity.ok(todo);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable long id,@RequestBody Todo todoDetails) {
         Todo updateTodo = todoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Device with id: " + id + " does not exist."));
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not exist with id: " + id));
 
-                updateTodo.setStatus(todoDetails.getStatus());
-                updateTodo.setRelayName(todoDetails.getRelayName());
-                updateTodo.setType(todoDetails.getType());
-                updateTodo.setScheduleOn(todoDetails.getScheduleOn());
-                updateTodo.setScheduleOff(todoDetails.getScheduleOff());
-                updateTodo.setIdleStatus(todoDetails.getIdleStatus());
-
+        updateTodo.setUsername(todoDetails.getUsername());
+        updateTodo.setDescription(todoDetails.getDescription());
+        updateTodo.setTargetDate(todoDetails.getTargetDate());
         todoRepository.save(updateTodo);
 
         return ResponseEntity.ok(updateTodo);
@@ -79,7 +50,7 @@ public class TodoController{
     public ResponseEntity<HttpStatus> deleteTodo(@PathVariable long id){
 
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Device not exist with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not exist with id: " + id));
 
         todoRepository.delete(todo);
 

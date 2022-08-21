@@ -8,35 +8,24 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-//@CrossOrigin(origins = "http://localhost:3000")
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tblDevices")
+@Table(name = "todo")
 public class Todo {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name = "relay_name")
-    private String relayName;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "schedule_on")
-    private LocalDate scheduleOn;
-
-    @Column(name = "schedule_off")
-    private LocalDate scheduleOff;
-
-    @Column(name = "idle_status")
-    private Integer idleStatus;
-
+    @Column(name = "targetDate")
+    private LocalDate targetDate;
 }
